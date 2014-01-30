@@ -26,13 +26,18 @@ class TwitSearch
         );
 
         $url = $this->api_url .'?'. $query;
-        
-        $response = file_get_contents($url, false, stream_context_create($options));
 
-        if ( $response !== false ) {
-            return $response;
-        } else {
-            throw new Exception('HTTP Error');
-        }
+		$tweets = array();
+		for ( $c = 0; $c < 100; $c ++ ) {
+			$response = file_get_contents($url, false, $options);
+			$decoded = json_decode($response);
+			array_push($decoded);
+
+			if ( property_exists($decoded->search_metadata, 'next_results') ) {
+				$url = $decoded->search_metadata->next_results;
+			} else {
+				return $treets;
+			}
+		}
     }
 }
