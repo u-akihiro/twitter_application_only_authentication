@@ -29,14 +29,16 @@ class TwitSearch
 
 		$tweets = array();
 		for ( $c = 0; $c < 100; $c ++ ) {
-			$response = file_get_contents($url, false, $options);
+			echo $c.'回目'.PHP_EOL;
+			$response = file_get_contents($url, false, stream_context_create($options));
 			$decoded = json_decode($response);
-			array_push($decoded);
+
+			$tweets[] = $decoded;
 
 			if ( property_exists($decoded->search_metadata, 'next_results') ) {
-				$url = $decoded->search_metadata->next_results;
+				$url = $this->api_url . $decoded->search_metadata->next_results;
 			} else {
-				return $treets;
+				return $tweets;
 			}
 		}
     }
