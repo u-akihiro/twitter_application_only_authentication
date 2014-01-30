@@ -29,7 +29,6 @@ class TwitSearch
 
 		$tweets = array();
 		for ( $c = 0; $c < 100; $c ++ ) {
-			echo $c.'回目'.PHP_EOL;
 			$response = file_get_contents($url, false, stream_context_create($options));
 			$decoded = json_decode($response);
 
